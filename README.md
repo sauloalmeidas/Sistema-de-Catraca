@@ -31,16 +31,16 @@ O projeto simula uma catraca digital onde usuários são cadastrados, recebem um
 
 ## 🛠️ Tecnologias utilizadas
 
-- HTML5
-- CSS3
-- JavaScript (Vanilla)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+
 - [html5-qrcode](https://github.com/mebjas/html5-qrcode)
 - [qrcodejs](https://github.com/davidshimjs/qrcodejs)
-
 ---
 
 ## 📁 Estrutura do projeto
-/projeto-catraca
+/Sistemas-de-catraca
 │
 ├── index.html # Cadastro e geração de QR Code
 ├── entrada.html # Scanner de QR Code (catraca)
