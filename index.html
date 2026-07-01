@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criação de acesso</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1/qrcode.min.js"></script>
+
+    <style>
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #e2e8f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* container principal */
+body > div {
+    width: 100%;
+    max-width: 900px;
+}
+
+/* inputs */
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+    color: #cbd5e1;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background: #0b1220;
+    color: white;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* botão */
+button {
+    margin-top: 15px;
+    padding: 10px 15px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    background: #38bdf8;
+    color: #0f172a;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* QR code */
+#qrcode {
+    margin-top: 20px;
+    padding: 15px;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 260px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+/* tabela responsiva */
+.card {
+    margin-top: 25px;
+    padding: 15px;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid #334155;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    overflow-x: auto;
+}
+
+/* tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px; /* permite scroll no mobile */
+}
+
+thead {
+    background: #1e293b;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+tr {
+    border-bottom: 1px solid #334155;
+}
+
+tr:hover {
+    background: rgba(56, 189, 248, 0.1);
+}
+
+/* botão excluir */
+.delet {
+    background: #ef4444;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+}
+
+/* ajustes mobile */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    table {
+        min-width: 450px;
+    }
+
+    #qrcode {
+        max-width: 220px;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+    <div>
+
+        <label>Nome</label>
+        <input id="nome">
+
+        <label>Idade</label>
+        <input id="idade" type="number">
+
+        <button id="Save">Salvar</button>
+
+        <div id="qrcode">Codigo QR</div>
+
+        <div class="card">
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>ID</th>
+                        <th>idade</th>
+                        <th>ações</th>
+                    </tr>
+                </thead>
+
+                <tbody id="linha"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <script>
+        const button = document.getElementById("Save")
+
+        button.addEventListener('click', () => {
+            salvar()
+            gerarqr()
+            rederizar()
+        })
+
+        document.getElementById("linha").addEventListener("click", (event) => {
+            if (event.target.classList.contains("delet")) {
+                const id = event.target.dataset.id;
+                d(id);
+            }
+
+        });
+
+        function d(id) {
+
+            let dados = JSON.parse(localStorage.getItem("use")) || []
+
+            dados = dados.filter(dado => dado.ID != id)
+
+            localStorage.setItem("use", JSON.stringify(dados))
+
+            rederizar()
+
+        }
+
+        function salvar() {
+
+            const add = JSON.parse(localStorage.getItem("use")) || []
+
+            const Nome = document.getElementById("nome").value
+            const idade = document.getElementById("idade").value
+
+            if (!Nome && !idade) {
+                alert("Preencha os campos")
+                return
+            }
+
+            const id_aleatorio = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+
+            let idfinal = ""
+
+            for (let i = 0; i < 10; i++) {
+                const caracters_aleatorias = Math.floor(Math.random() * id_aleatorio.length)
+                idfinal += id_aleatorio[caracters_aleatorias]
+            }
+
+            add.push({
+                nome: Nome,
+                Idade: idade,
+                ID: idfinal
+
+            })
+
+
+            localStorage.setItem("use", JSON.stringify(add))
+
+
+
+        }
+
+        function gerarqr() {
+
+            const dados_qr = JSON.parse(localStorage.getItem("use")) || []
+
+            document.getElementById("qrcode").innerHTML = ""
+
+            new QRCode(document.getElementById("qrcode"), {
+                text: dados_qr[dados_qr.length - 1].ID,
+                width: 200,
+                height: 200,
+            })
+
+        }
+
+        function rederizar() {
+            const container = document.getElementById("linha")
+            const dados = JSON.parse(localStorage.getItem("use")) || []
+
+            container.innerHTML = ""
+
+            dados.forEach(u => {
+                container.innerHTML += `
+                 <tr>
+            <td>${u.nome}</td>
+            <td>${u.ID}</td>
+            <td>${u.Idade}</td>
+          <td>
+        <button data-id="${u.ID}" class="delet">
+            Excluir
+        </button>
+      </td>
+        </tr>
+                `
+            })
+
+        }
+
+        rederizar()
+
+
+    </script>
+
+</body>
+
+</html>

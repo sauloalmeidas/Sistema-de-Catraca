@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrada - Empresa</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+    body {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    text-align: center;
+}
+
+/* scanner responsivo */
+#reader {
+    width: 100%;
+    max-width: 380px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    box-sizing: border-box;
+}
+
+/* resultado responsivo */
+#result {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    transition: 0.3s;
+    box-sizing: border-box;
+}
+
+/* câmera ajustada */
+#reader video {
+    border-radius: 12px;
+    width: 100% !important;
+}
+
+/* scanner interno */
+#reader__scan_region {
+    border-radius: 12px;
+}
+
+/* ajustes para telas pequenas */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 18px;
+    }
+
+    #result {
+        font-size: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+    <h1>🔐 Sistema de Entrada</h1>
+
+    <div id="reader"></div>
+
+    <p id="result">....</p>
+
+    <script>
+        const p = document.getElementById("result")
+
+        function sucesso(resultado) {
+            let dados = JSON.parse(localStorage.getItem("use")) || []
+
+            let indice = dados.findIndex(d => d.ID == resultado);
+
+              if (indice === -1) {
+               p.textContent = "Usuário não encontrado no sistema";
+            return;
+            }
+
+console.log(dados[indice].nome);
+p.textContent = dados[indice].nome
+
+            //  findindex = encontra o indice do objeto no entanto se retorno for -1 ele não encontrou nenhum elemento que sartisfaça a condição
+
+             
+             }
+
+        
+
+        function erro() {
+
+        }
+
+
+        const l = new Html5QrcodeScanner(
+            "reader", 
+            {
+            // l esta guardando as ferramentas da biblioteca para usar no qr
+            // l = {
+            //   render: function(...) { ... },
+            // clear: function() { ... },
+            //   pause: function() { ... }
+            fps: 10,
+            qrbox: 200,
+        })
+
+       l.render(sucesso, erro)
+    //    l.render = inicia a camera e começa a escanear
+    
+    function atual() {
+        let dados = JSON.parse(localStorage.getItem(use)) || []
+    }
+
+
+    setInterval(() => {
+        atual()
+    }, 1000)
+
+    </script>
+
+</body>
+
+</html>
